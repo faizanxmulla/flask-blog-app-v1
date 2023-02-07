@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{%block title%} Delete Account page {%endblock%}
+
+{% block content %}
+
+<div class="delete-account-container">
+
+    <h4>Delete Account</h4>
+    <p>Are you sure you want to delete your account?</p>
+    <hr>
+    <br>
+
+    <form method="POST" action="{{ url_for('delete_account') }}">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            <label for="username"> Username </label>
+            <input type="text" id="username" name="username" value="{{ current_user.username }}" class="form-control"
+                style="width:300px" readonly>
+        </div>
+
+
+        <div class="form-group">
+            {{ form.password.label }}
+            {{ form.password(class="form-control", style="width:300px", placeholder="Enter Password") }}
+            {% for error in form.password.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.confirm_password.label }}
+            {{ form.confirm_password(class="form-control", style="width:300px", placeholder="Confirm Password") }}
+            {% for error in form.confirm_password.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <br>
+        <input type="submit" value="Delete Account" class="btn btn-outline-danger">
+        <a href="{{ url_for('feed') }}" class="btn btn-outline-secondary ml-2">Cancel</a>
+    </form>
+
+</div>
+
+{% endblock %}

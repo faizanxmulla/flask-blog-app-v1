@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h4>Edit Comment</h4>
+<p>Make changes to your comments.</p>
+<hr> 
+<br>
+
+<form method="POST" action="{{ url_for('edit_comment', comment_id=comment_id,post_id=post_id) }}">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.content.label }}
+        {{ form.content(class="form-control") }}
+        {% for error in form.content.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+    </div>
+    <input type="submit" value="Edit Comment" class="btn btn-outline-primary">
+
+    <a href="{{ url_for('comment', post_id = post_id) }}" class="btn btn-outline-secondary ml-2">Cancel</a>
+</form>
+{% endblock %}

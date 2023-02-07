@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{%block title%} Update Account page {%endblock%}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h4>Update Account</h4>
+    <p></p>
+    <hr>
+    <form method="POST" action="{{ url_for('update_account') }}" enctype="multipart/form-data">
+
+        {{ form.csrf_token }}
+
+        <div class="form-group">
+            {{ form.username.label }} :  
+            {{ form.username }}
+            {% if form.username.errors %}
+            {% for error in form.username.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.profile_image.label }}  : 
+            {{ form.profile_image }}
+            {% if form.profile_image.errors %}
+
+            {% if current_user.profile_image %}
+            <img src="{{ url_for('static', filename='profile/' + current_user.profile_image) }}"
+                class="img-fluid rounded-circle" width="200" height="200">
+            {% endif %}
+
+            {% for error in form.profile_image.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        <br>
+        <div class="form-group">
+            <input type="submit" value="Update Account" class="btn btn-outline-primary">
+
+            <a href="{{ url_for('login') }}" class="btn btn-outline-secondary ml-2">Cancel</a>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

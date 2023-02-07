@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{%block title%} Followers page {%endblock%}
+
+{% block content %}
+
+<br>
+<h4>Followers page :</h4>
+<p>It consists of the list of usernames who are following you.</p>
+<hr>
+<br>
+
+<table>
+    <tbody>
+        {% for x in followers %}
+        {% if x != user %}
+        <tr>
+            <td>
+                <a href="{{ url_for('profile', username=x.username) }}">{{ x.username }}</a>
+            </td>
+
+            <td>
+                <div class="follow-unfollow-btn-container">
+                    {% if current_user.is_following(x) %}
+                    <form action="{{ url_for('unfollow', username=x.username) }}" method="POST">
+                        {{ unfollow_form.hidden_tag() }}
+                        <button type="submit" class="btn btn-outline-danger btn-sm">Unfollow</button>
+                    </form>
+
+                    {% else %}
+
+                    <form action="{{ url_for('follow', username=x.username) }}" method="POST">
+                        {{ follow_form.hidden_tag() }}
+                        <button type="submit" class="btn btn-outline-success btn-sm">Follow</button>
+                    </form>
+
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+
+        {% endif %}
+
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+
+
+
+

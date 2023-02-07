@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{%block title%} Profile Page {%endblock%}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row">
+
+        <div class="col-md-4">
+
+            {% if user.profile_image %}
+                <img src="{{ url_for('static', filename='profile/' + user.profile_image) }}" class="img-fluid rounded-circle"
+                    width="200" height="200" style="object-fit:cover">
+
+                <br>
+                <br>
+
+                <a href="{{ url_for('update_account') }}" class="btn btn-outline-primary ml-auto">Update Account</a>
+
+                <a href="{{ url_for('delete_account') }}" class="btn btn-outline-danger ml-2">Delete Account</a>
+
+            {% else %}
+
+            <img src="{{ url_for('static', filename='profile/def.jpg') }}" class="img-fluid rounded-circle" width="200"
+                height="200">
+            
+            <br>
+            <br>
+            
+            <a href="{{ url_for('update_account') }}" class="btn btn-outline-primary ml-auto">Update Account</a>
+            
+            <a href="{{ url_for('delete_account') }}" class="btn btn-outline-danger ml-2">Delete Account</a>
+
+            {% endif %}
+
+                
+        </div>
+
+        <div class="col-md-8">
+
+            <div class="d-flex justify-content-between align-items-center mt-5">
+                <h4>{{ user.username }}</h4>
+            </div>
+            
+            <div class="profile-action">
+            
+                {% if current_user != user %}
+                    {% if current_user.is_following(user) %}
+
+                    <div class="row">
+                        <!-- <div class="col-6 text-center">
+                            <form method="POST" action="{{ url_for('follow', username=user.username) }}">
+                                {{ follow_form.hidden_tag() }}
+                                <button type="submit" class="btn btn-outline-primary">Follow</button>
+                            </form>
+                        </div> -->
+
+                        <div class="col-6 text-center">
+                            <form method="POST" action="{{ url_for('unfollow', username=user.username) }}">
+                                {{ unfollow_form.hidden_tag() }}
+                                <button type="submit" class="btn btn-outline-danger">Unfollow</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                
+                    {% else %}
+
+                    <div class="row">
+                        <div class="col-6 text-center">
+                            <form method="POST" action="{{ url_for('follow', username=user.username) }}">
+                                {{ follow_form.hidden_tag() }}
+                                <button type="submit" class="btn btn-outline-primary">Follow</button>
+                            </form>
+                        </div>
+                    
+                        <!-- <div class="col-6 text-center">
+                            <form method="POST" action="{{ url_for('unfollow', username=user.username) }}">
+                                {{ unfollow_form.hidden_tag() }}
+                                <button type="submit" class="btn btn-outline-danger ml+2">Unfollow</button>
+                            </form>
+                        </div> -->
+                    </div>
+                
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <br>
+            <br>
+            <br>
+            <p style="font-size:20px">Total posts : {{ published_posts_count }} </p>
+            
+            <p style="font-size:20px"> <a href="{{ url_for('followers', username=user.username) }}"> Followers : {{ followers_count }}</a></p>
+            
+            <p style="font-size:20px"> <a href="{{ url_for('following', username=user.username) }}"> Following : {{ following_count }}</a></p>
+
+        </div>
+        
+
+
+            <div class="card card-body bg-light mt-5">
+                <h4>My Posts</h4>
+
+                {% if user.posts|length > 0 %}
+                {% for post in user.posts | reverse %}
+                
+                <div class="card card-inner mb-2">
+                
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6>{{ post.title }}</h6>
+                
+                        {% if post.last_updated %}
+                        <small class="text-muted">Last updated on : {{ post.last_updated.replace(tzinfo=timezone('UTC')).astimezone(timezone('Asia/Kolkata')).strftime("%d-%m-%Y %H:%M:%S") }}</small>
+                
+                        {% else %}
+                        <small class="text-muted">Created on : {{ post.timestamp.replace(tzinfo=timezone('UTC')).astimezone(timezone('Asia/Kolkata')).strftime("%d-%m-%Y %H:%M:%S") }}</small>
+
+                        {% endif %}
+                
+                    </div>
+                
+                    <div class="card-body">
+                        {% if post.image %}
+                        <img src="{{ url_for('static', filename='posts/' + post.image) }}" class="img-fluid rounded">
+                        {% endif %}
+                        <br>
+                        <br>
+                        <p><strong>Caption : </strong>{{ post.caption }}</p>
+                    </div>
+                
+                    <div class="card-footer d-flex justify-content">
+                        {% if current_user.is_authenticated and current_user.username == user.username %}
+
+                        <div class="btn-group">
+                            <a href="#" class="btn btn-outline-info btn-sm">Likes : {{ post.likes.count() }}</a>
+
+                            <a href="{{ url_for('comment', post_id=post.id) }}" class="btn btn-outline-info btn-sm ml-2">Comments : {{
+                                post.comments.count()}}</a>
+
+                            <a href="#" class="btn btn-outline-info btn-sm ml-2">Engagement: {{ post.likes.count() + post.comments.count() }}</a>
+                        </div>
+                        
+                        {% endif %}
+
+
+                        <div class="btn-group">
+                            {% if current_user.is_authenticated and current_user != user %}
+                        
+                            <form method="POST" action="{{ url_for('like', post_id=post.id) }}">
+                                {{ like_form.hidden_tag() }}
+                                <button type="submit" class="btn btn-outline-primary btn-sm">Like : {{ post.likes.count() }}</button>
+                            </form>
+                        
+                            <form method="POST" action="{{ url_for('unlike', post_id=post.id) }}">
+                                {{ unlike_form.hidden_tag() }}
+                                <button type="submit" class="btn btn-outline-danger btn-sm ml-2">Unlike</button>
+                            </form>
+                            
+                            <a href="{{ url_for('comment', post_id=post.id) }}" class="btn btn-outline-info btn-sm ml-2">Comments : {{
+                                post.comments.count()}}</a>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                        
+
+                    <div class="card-footer d-flex justify-content-end">
+                    
+                        {% if current_user.is_authenticated and current_user.username == user.username %}
+                        <div class="btn-group">
+                            <a href="{{ url_for('update_post', post_id=post.id) }}" class="btn btn-outline-primary btn-sm">Update</a>
+                    
+                            <a href="{{ url_for('delete_post', post_id=post.id) }}" class="btn btn-outline-danger btn-sm ml-2">Delete</a>
+                        </div>
+                    
+                        {% endif %}
+                    </div>
+
+                            
+                    
+                </div>
+
+            {% endfor %}
+
+            </div>
+
+            {% else %}
+            <p>No posts yet.</p>
+            {% endif %}
+
+    </div>
+</div>
+
+
+{% endblock %}

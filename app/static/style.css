@@ -1,0 +1,63 @@
+/* profile image  */
+
+img.rounded-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+
+/* already existing comments section */
+.existing-comments {
+    overflow: auto;
+    max-height: 60vh;
+}
+
+/* sticky bottom for add comment section  */
+.add-comment-form-sticky-bottom {
+    position: fixed;
+    bottom: 10px;
+    left: 220px;
+    right: 50px;
+    width: 70%;
+}
+
+.btn-group{
+    margin-right:5px;
+}
+
+#search-dropdown {
+    width: 50%;
+    position: absolute;
+    background-color: #fff;
+    z-index: 100;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.profile-action {
+    position: absolute;
+    right: 50;
+    margin-left: auto;
+}
+
+/* message flashing */
+
+.danger {
+    color: #DC3545
+}
+
+.success {
+    color: #5cb85c
+}
+
+.follow-unfollow-btn-container {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.small-btn {
+    font-size: 12px;
+    padding: 4px 8px;
+}

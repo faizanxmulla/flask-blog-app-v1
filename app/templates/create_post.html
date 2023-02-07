@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{%block title%} Create Post page {%endblock%}
+
+{% block content %}
+<br>
+<h4>Create a new post</h4>
+<p>Fill the form to create a new post.</p>
+
+<hr>
+<form method="POST" action="{{ url_for('create_post') }}" enctype="multipart/form-data">
+
+    {{ form.csrf_token }}
+
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" style="width:60%">
+        {% if form.title.errors %}
+        {% for error in form.title.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        <label for="caption">Caption</label>
+        <textarea class="form-control" id="caption" name="caption" placeholder="Enter Caption / Description" style="width:60%" rows="6"></textarea>
+        {% if form.caption.errors %}
+        {% for error in form.caption.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        <label for="image">Image</label>
+        <input type="file" class="form-control-file" id="image" name="image">
+        {% if form.image.errors %}
+        {% for error in form.image.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <br>
+    <button type="submit" class="btn btn-outline-primary">Create Post</button>
+</form>
+{% endblock %}

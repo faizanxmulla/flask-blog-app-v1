@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title%} Delete post page {%endblock%}
+
+{% block content %}
+
+<h4>Delete Post</h4>
+<p style="font-size:16px"> Press the delete button in order to delete the post.</p>
+<hr>
+<br>
+
+<form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
+    {{ form.hidden_tag() }}
+    <p style="font-size:18px">Are you sure you want to delete this post ??</p>
+
+    <input type="submit" value="Delete Post" class="btn btn-outline-danger">
+
+    <a href="{{ url_for('profile', username=current_user.username) }}" class="btn btn-outline-secondary ml-2">Cancel</a>
+</form>
+{% endblock %}

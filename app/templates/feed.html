@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{%block title%} Feed Page {%endblock%}
+
+{% block content %}
+{% for post in posts %}
+<div class="card card-inner mb-2">
+
+    <div class="card-header">
+        <a href="{{ url_for('profile', username=post.user.username) }}">
+            <h5>{{ post.user.username }}</h5>
+        </a>
+    </div>
+
+    <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+
+        {% if post.image %}
+        <img src="{{ url_for('static', filename='posts/' + post.image) }}" class="card-img-top" width="30%" height="40%" alt="{{ post.title }}">
+        {% endif %}
+        <br>
+        <br>
+        <p class="card-text" style="font-size:19px"> <strong>Caption :</strong>
+            {{ post.caption }}</p>
+
+        {% if post.last_updated %}
+        <small class="text-muted">Last updated on : {{ post.last_updated.replace(tzinfo=timezone('UTC')).astimezone(timezone('Asia/Kolkata')).strftime("%d-%m-%Y %H:%M:%S") }}</small>
+
+        {% else %}
+        <small class="text-muted">Created on : {{ post.timestamp.replace(tzinfo=timezone('UTC')).astimezone(timezone('Asia/Kolkata')).strftime("%d-%m-%Y %H:%M:%S") }}</small>
+        {% endif %}
+
+    </div>
+
+    <div class="card-footer">
+
+        <a href="{{ url_for('like', post_id=post.id) }}" class="btn btn-primary">
+            {% if current_user.is_authenticated and post.likes.filter_by(user_id=current_user.id).first() %}
+            Unlike
+            {% else %}
+            Like
+            {% endif %}
+            <span class="badge badge-light">{{ post.likes.count() }}</span>
+        </a>
+        <a href="{{ url_for('comment', post_id=post.id) }}" class="btn btn-secondary">
+            <span class="badge badge-light">{{ post.comments.count() }}</span>
+            Comments
+        </a>
+    </div>
+
+</div>
+{% endfor %}
+{% if not posts %}
+<br> 
+<br>
+<p style="font-size : 20px;">There are no posts in your feed. Connect with other users to see what they are posting.</p>
+{% endif %}
+{% endblock %}
+
+
+
+
+
